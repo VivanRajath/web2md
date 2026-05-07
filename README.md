@@ -2,6 +2,11 @@
 
 Convert any website into a local, structured Markdown knowledge base — built for AI agents and humans who need to reason over web content without wasting tokens.
 
+## Documentation
+
+- [Architecture Guide](./ARCHITECTURE.md)
+- [Runbook](./RUNBOOK.md)
+
 ---
 
 ## The Problem
