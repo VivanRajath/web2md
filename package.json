@@ -1,6 +1,6 @@
 {
   "name": "webb2md",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Convert any website into a structured markdown knowledge directory — optimized for humans, AI agents, and RAG pipelines.",
   "author": "VivanRajath",
   "license": "ISC",
@@ -38,8 +38,7 @@
     "cheerio": "^1.2.0",
     "commander": "^14.0.3",
     "jsdom": "^29.1.1",
-    "turndown": "^7.2.4",
-    "webb2md": "^1.0.0"
+    "turndown": "^7.2.4"
   },
   "devDependencies": {
     "@types/jsdom": "^28.0.1",
