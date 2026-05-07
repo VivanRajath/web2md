@@ -1,4 +1,4 @@
-# web2md
+# webb2md
 
 Convert any website into a local, structured Markdown knowledge base — built for AI agents and humans who need to reason over web content without wasting tokens.
 
@@ -9,13 +9,37 @@ Convert any website into a local, structured Markdown knowledge base — built f
 
 ---
 
+## Installation
+
+**Run without installing (recommended):**
+
+```bash
+npx webb2md <url>
+```
+
+**Install globally:**
+
+```bash
+npm install -g webb2md
+webb2md <url>
+```
+
+**Install locally in a project:**
+
+```bash
+npm install webb2md
+npx webb2md <url>
+```
+
+---
+
 ## The Problem
 
 When an AI agent is asked to research a webpage, it spends the majority of its context window on mechanical work: fetching a URL, stripping HTML boilerplate, parsing navigation and footers, extracting text, and formatting it. None of that processing is the task — it is overhead. On large documentation sites with dozens of pages, the token cost of this pipeline can make the actual reasoning task impractical.
 
-## What web2md Does
+## What webb2md Does
 
-web2md is a CLI tool that moves all of that overhead out of the agent and onto the local filesystem. You run it once against a URL or an entire site. It fetches, parses, cleans, and converts every page into plain Markdown, then writes a structured directory to disk. From that point forward, an agent reads local files — no fetching, no parsing, no HTML — only content.
+webb2md is a CLI tool that moves all of that overhead out of the agent and onto the local filesystem. You run it once against a URL or an entire site. It fetches, parses, cleans, and converts every page into plain Markdown, then writes a structured directory to disk. From that point forward, an agent reads local files — no fetching, no parsing, no HTML — only content.
 
 The output is also structured for retrieval-augmented generation (RAG). With the `--chunks` flag, every page is split on its `##` headings into individual chunk files, each with YAML frontmatter that records the source URL, page title, section heading, chunk index, and total chunk count. A vector store can ingest these chunks directly without any pre-processing.
 
@@ -38,20 +62,17 @@ The output is also structured for retrieval-augmented generation (RAG). With the
 ## Quick Start
 
 ```bash
-# Install dependencies
-npm install
-
 # Fetch a single page
-npm run dev -- https://example.com
+npx webb2md https://example.com
 
 # Crawl an entire site
-npm run dev -- https://docs.example.com --crawl
+npx webb2md https://docs.example.com --crawl
 
 # Crawl with RAG chunks
-npm run dev -- https://docs.example.com --crawl --chunks
+npx webb2md https://docs.example.com --crawl --chunks
 
 # Crawl a specific section only
-npm run dev -- https://docs.example.com --crawl --include /guides --max-pages 100
+npx webb2md https://docs.example.com --crawl --include /guides --max-pages 100
 ```
 
 ---

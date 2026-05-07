@@ -1,6 +1,8 @@
-# web2md — Architecture
+# webb2md — Architecture
 
-A deep explanation of the design, data flow, module responsibilities, and key decisions in the web2mdcodebase.
+A deep explanation of the design, data flow, module responsibilities, and key decisions in the webb2md codebase.
+
+**npm package:** `webb2md` — install with `npm install -g webb2md` or run directly with `npx webb2md <url>`.
 
 ---
 
@@ -8,7 +10,7 @@ A deep explanation of the design, data flow, module responsibilities, and key de
 
 Most AI agent workflows that involve web research operate by passing a URL to the agent, which then fetches the page in real time, strips HTML, extracts text, and reasons over the content — all inside the context window. Every step of that pipeline consumes tokens. On a single page this is tolerable. On a documentation site with 50 or 100 pages, the mechanical overhead of fetching and parsing dominates the context window, leaving little room for actual reasoning.
 
-web2md relocates that pipeline entirely to the local filesystem. A single CLI invocation fetches, parses, deduplicates, and structures an entire site into plain Markdown files. The agent then reads local files. It never sees HTML, never makes HTTP requests, and never wastes tokens on navigation menus, footers, or cookie banners. The output is also structured for direct RAG ingestion — chunk files with YAML frontmatter can be embedded into a vector store without any additional pre-processing.
+webb2md relocates that pipeline entirely to the local filesystem. A single CLI invocation fetches, parses, deduplicates, and structures an entire site into plain Markdown files. The agent then reads local files. It never sees HTML, never makes HTTP requests, and never wastes tokens on navigation menus, footers, or cookie banners. The output is also structured for direct RAG ingestion — chunk files with YAML frontmatter can be embedded into a vector store without any additional pre-processing.
 
 The codebase is organised around a strict separation of concerns: crawling, parsing, and exporting are independent layers that communicate through a typed in-memory registry. No layer has knowledge of the others' internals.
 

@@ -1,52 +1,68 @@
-# web2md — Runbook
+# webb2md — Runbook
 
-Operational reference for setting up, running, and working with web2md in development and production.
+Operational reference for installing, running, and working with webb2md.
 
 ---
 
 ## Prerequisites
 
-- Node.js >= 18 (requires native `URL`, `fs`, ESM module support)
+- Node.js >= 18
 - npm >= 9
 
 ---
 
-## 1. Install Dependencies
+## 1. Installing the Package
+
+### Run without installing (npx)
+
+No install step required. npx downloads and runs the latest published version:
 
 ```bash
-npm install
+npx webb2md <url> [options]
+```
+
+### Install globally
+
+```bash
+npm install -g webb2md
+```
+
+Then run from anywhere:
+
+```bash
+webb2md <url> [options]
+```
+
+### Install locally in a project
+
+```bash
+npm install webb2md
+npx webb2md <url> [options]
 ```
 
 ---
 
-## 2. Build
+## 2. Developing Locally (contributors only)
+
+Clone the repo, install dependencies, and run from source:
+
+```bash
+git clone https://github.com/VivanRajath/webb2md
+cd webb2md
+npm install
+npm run dev -- <url> [options]
+```
+
+Build the compiled output:
 
 ```bash
 npm run build
+node dist/index.js <url> [options]
 ```
-
-Compiles TypeScript source from `src/` into `dist/` using `tsc`. Required before running in production mode. Not required for development mode.
 
 ---
 
 ## 3. Running the Tool
-
-### Development mode (no build step)
-
-```bash
-npm run dev -- <url> [options]
-```
-
-Uses `tsx` to execute `src/index.ts` directly. The fastest way to run during development or testing.
-
-### Production mode (compiled output)
-
-```bash
-npm run build
-npm start -- <url> [options]
-```
-
-Runs the compiled output from `dist/`. Use this in CI, pipelines, or when distributing the built artifact.
 
 ---
 
@@ -54,27 +70,13 @@ Runs the compiled output from `dist/`. Use this in CI, pipelines, or when distri
 
 ### 4a. Single-page fetch
 
-Fetches one URL, extracts readable article content via Mozilla Readability, converts to Markdown, and writes a `.md` file to the current working directory.
+Fetches one URL, extracts readable article content via Mozilla Readability, converts to Markdown, and writes a structured directory to `output/<hostname>/`.
 
 ```bash
-npm run dev -- https://example.com
+npx webb2md https://example.com
 ```
 
-Output: `example-com.md` in the current directory.
-
-Custom output path:
-
-```bash
-npm run dev -- https://example.com -o my-notes.md
-```
-
-Export as JSON:
-
-```bash
-npm run dev -- https://example.com --json
-```
-
-JSON output format: `{ title, url, markdown }`
+Output written to `output/example.com/`.
 
 ---
 
@@ -83,7 +85,7 @@ JSON output format: `{ title, url, markdown }`
 Crawls a site by following internal links from the seed URL up to a configurable depth. Writes a structured knowledge directory to `output/<hostname>/`.
 
 ```bash
-npm run dev -- https://docs.example.com --crawl
+npx webb2md https://docs.example.com --crawl
 ```
 
 The crawl runs as a BFS (breadth-first search). The seed URL is enqueued at depth 0. Each discovered internal link is enqueued at `parent depth + 1`. Pages at depth greater than `--depth` are not fetched.
@@ -108,37 +110,37 @@ The crawl runs as a BFS (breadth-first search). The seed URL is enqueued at dept
 Crawl the entire site with defaults (depth 3, 50 pages):
 
 ```bash
-npm run dev -- https://docs.example.com --crawl
+npx webb2md https://docs.example.com --crawl
 ```
 
 Crawl only the `/docs` section, up to 200 pages:
 
 ```bash
-npm run dev -- https://site.com --crawl --include /docs --max-pages 200
+npx webb2md https://site.com --crawl --include /docs --max-pages 200
 ```
 
 Crawl at depth 5, skip blog and changelog:
 
 ```bash
-npm run dev -- https://site.com --crawl --depth 5 --exclude /blog --exclude /changelog
+npx webb2md https://site.com --crawl --depth 5 --exclude /blog --exclude /changelog
 ```
 
 Crawl multiple path prefixes and exclude an internal sub-path:
 
 ```bash
-npm run dev -- https://site.com --crawl --include /api --include /guides --exclude /api/internal
+npx webb2md https://site.com --crawl --include /api --include /guides --exclude /api/internal
 ```
 
 Crawl and produce RAG-ready chunk files:
 
 ```bash
-npm run dev -- https://docs.example.com --crawl --chunks
+npx webb2md https://docs.example.com --crawl --chunks
 ```
 
 Crawl with maximum coverage:
 
 ```bash
-npm run dev -- https://docs.example.com --crawl --depth 10 --max-pages 500 --chunks
+npx webb2md https://docs.example.com --crawl --depth 10 --max-pages 500 --chunks
 ```
 
 > Windows + Git Bash note: Git Bash expands bare path arguments like `/docs` into absolute Windows paths like `C:/Program Files/Git/docs`. The tool detects and normalises these automatically via `UrlFilter.ts`. Pass paths as `/docs` regardless of shell.
@@ -263,14 +265,24 @@ If two URLs produce the same base slug, a numeric suffix is appended to the seco
 
 ---
 
-## 10. Script Reference
+## 10. Command Reference
+
+### Using the published package
+
+| Command | Description |
+|---|---|
+| `npx webb2md <url>` | Run without installing (always uses latest version) |
+| `npm install -g webb2md` | Install globally |
+| `webb2md <url>` | Run after global install |
+
+### For contributors (local development)
 
 | Command | Description |
 |---|---|
 | `npm install` | Install all dependencies |
 | `npm run dev -- <args>` | Run via `tsx` with no build step |
 | `npm run build` | Compile TypeScript to `dist/` |
-| `npm start -- <args>` | Run compiled output from `dist/` |
+| `node dist/index.js <args>` | Run compiled output directly |
 
 ---
 
